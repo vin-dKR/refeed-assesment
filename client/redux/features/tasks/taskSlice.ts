@@ -48,7 +48,7 @@ const taskSlice = createSlice({
             state.selectedTask = action.payload
         })
 
-        builder.addCase(fetchTasks.rejected, (state, action) => {
+        builder.addCase(fetchTaskById.rejected, (state, action) => {
             state.loading = "failed"
             state.error = action.error.message || "failed to fetch this task! cuz the engineer has skill issue"
         })
@@ -65,7 +65,7 @@ const taskSlice = createSlice({
             state.tasks.push(action.payload)
         })
 
-        builder.addCase(fetchTasks.rejected, (state, action) => {
+        builder.addCase(addTask.rejected, (state, action) => {
             state.loading = "failed"
             state.error = action.error.message || "failed to add task! engineer has some real sill issues"
         })
@@ -87,7 +87,7 @@ const taskSlice = createSlice({
             }
         })
 
-        builder.addCase(fetchTasks.rejected, (state, action) => {
+        builder.addCase(updateTask.rejected, (state, action) => {
             state.loading = "failed"
             state.error = action.error.message || "failed to update the task"
         })
@@ -105,7 +105,7 @@ const taskSlice = createSlice({
             state.selectedTask = null
         })
 
-        builder.addCase(fetchTasks.rejected, (state, action) => {
+        builder.addCase(deleteTask.rejected, (state, action) => {
             state.loading = "failed"
             state.error = action.error.message || "failed to delete task! engineer has some real sill issues"
         })
