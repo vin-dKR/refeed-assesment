@@ -1,15 +1,27 @@
-import React from "react";
+"use client"
+
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import TaskList from "@/components/reusables/TaskList";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/redux/store"
-import { useSelector } from "react-redux";
+import { fetchTasks } from "@/redux/features/tasks/taskThunk";
+import { Progress } from "@/components/ui/progress";
+import ErrorDisplay from "@/components/reusables/ErrorDisplay";
+import TaskList from "@/components/reusables/TaskList";
+
 
 export default function Home() {
     const dispatch = useDispatch<AppDispatch>()
     const { tasks, loading, error } = useSelector((state: RootState) => state.tasks) 
+
+    useEffect(() => {
+        dispatch(fetchTasks())
+    }, [dispatch])
+
+    if (loading === "pending") return <Progress />
+
     return (
         <div className="container mx-auto py-8 px-4 sm:w-3/5 w-full">
             <div className="flex justify-between items-center mb-6">
@@ -21,6 +33,8 @@ export default function Home() {
                     </Button>
                 </Link>
             </div>
+            {error && <ErrorDisplay message={error} />}
+            <TaskList tasks={tasks} />
         </div>
     )
 }
