@@ -55,6 +55,15 @@ declare global {
         isOpen: boolean
         onClose: () => void
     }
+
+    interface TaskFormProps {
+        onSubmit: (data: { title: string; description: string; status: string }) => void
+        initialValues?: {
+            title: string,
+            description: string,
+            status: string
+        }
+    }
 }
 
 export {}
