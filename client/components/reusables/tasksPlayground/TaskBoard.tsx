@@ -4,8 +4,7 @@ import { useState } from "react"
 import { useSelector } from "react-redux"
 import type { RootState } from "@/redux/store"
 import TaskColumn from "./TaskColumn"
-import TaskDetailModal from "./TaskDetailModal"
-import TaskFormModal from "./TaskFormModal"
+import TaskDetailModal from "../tasksPopups/TaskDetailModal"
 
 export default function TaskBoard() {
     const { tasks } = useSelector((state: RootState) => state.tasks)
@@ -31,7 +30,12 @@ export default function TaskBoard() {
     return (
         <div className="h-full flex flex-col">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1">
-                <TaskColumn title="To Do" tasks={pendingTasks} onTaskClick={handleTaskClick} onEditClick={handleEditClick} />
+                <TaskColumn 
+                    title="To Do" 
+                    tasks={pendingTasks} 
+                    onTaskClick={handleTaskClick} 
+                    onEditClick={handleEditClick} 
+                />
                 <TaskColumn
                     title="In Progress"
                     tasks={inProgressTasks}
@@ -52,13 +56,11 @@ export default function TaskBoard() {
                     isOpen={isDetailModalOpen}
                     onClose={() => setIsDetailModalOpen(false)}
                     onEditClick={() => {
-                    setIsDetailModalOpen(false)
-                    handleEditClick(selectedTask)
-                }}
+                        setIsDetailModalOpen(false)
+                        handleEditClick(selectedTask)
+                    }}
                 />
             )}
-
-            <TaskFormModal task={editingTask} isOpen={isFormModalOpen} onClose={() => setIsFormModalOpen(false)} />
         </div>
     )
 }

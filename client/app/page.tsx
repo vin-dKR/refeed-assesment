@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/redux/store"
 import { fetchTasks } from "@/redux/features/tasks/taskThunk";
 import { Progress } from "@/components/ui/progress";
-import TaskBoard from "@/components/reusables/TaskBoard";
-import TaskFormModal from "@/components/reusables/TaskFormModal";
+import TaskBoard from "@/components/reusables/tasksPlayground/TaskBoard";
+import TaskFormModal from "@/components/reusables/tasksPopups/TaskFormModal";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 

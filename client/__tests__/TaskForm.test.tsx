@@ -4,7 +4,6 @@ import { render, screen } from "@testing-library/react"
 import TaskForm from '@/components/reusables/TaskForm'
 import { Provider } from 'react-redux'
 import configureStore from 'redux-mock-store'
-import TaskForm from "@/components/reusables/TaskForm"
 
 const mockStore = configureStore([])
 
