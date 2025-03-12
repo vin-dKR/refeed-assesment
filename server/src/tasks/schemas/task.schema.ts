@@ -9,7 +9,7 @@ export class Task extends Document {
     @Prop({ required: true })
     description: string;
 
-    @Prop({ enum: ['pending', 'in progress', 'completed'], default: 'pending' })
+    @Prop({ enum: ['pending', 'in-progress', 'completed'], default: 'pending' })
     status: string;
 }
 

@@ -133,3 +133,11 @@ html, body {
     @apply bg-background text-foreground;
   }
 }
+
+.fixed-dialog {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 50 !important;
+}

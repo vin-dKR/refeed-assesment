@@ -7,6 +7,6 @@ export class CreateTaskDto {
     @IsNotEmpty()
     description: string;
 
-    @IsEnum(['pending', 'in progress', 'completed'])
+    @IsEnum(['pending', 'in-progress', 'completed'])
     status?: string;
 }

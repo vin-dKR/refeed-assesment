@@ -9,7 +9,7 @@ export class UpdateTaskDto {
     @IsOptional()
     description?: string;
 
-    @IsEnum(['pending', 'in progress', 'completed'])
+    @IsEnum(['pending', 'in-progress', 'completed'])
     @IsOptional()
     status?: string;
 }
