@@ -27,8 +27,13 @@ export default function TaskBoard() {
         setIsFormModalOpen(true)
     }
 
+
     return (
         <div className="h-full flex flex-col">
+            {tasks.length === 0 && (
+                <div className="min-h-[400px] flex items-center justify-center text-muted-foreground text-sm border rounded-lg mb-4">No tasks at this moment!</div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1">
                 <TaskColumn 
                     title="To Do" 
@@ -50,6 +55,17 @@ export default function TaskBoard() {
                 />
             </div>
 
+            {editingTask && (
+                <TaskDetailModal
+                    task={editingTask}
+                    isOpen={isFormModalOpen}
+                    onClose={() => setIsFormModalOpen(false)}
+                    onEditClick={() => {
+                        setIsDetailModalOpen(false)
+                        handleEditClick(editingTask)
+                    }}
+                />
+            )}
             {selectedTask && (
                 <TaskDetailModal
                     task={selectedTask}

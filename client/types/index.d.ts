@@ -10,13 +10,6 @@ declare global {
         tasks: Task[]
     }
 
-    interface TaskItemProps {
-        task: Task
-        onToggleComplete: (id: string) => void
-        onEdit: (task: Task) => void
-        onDelete: (id: string) => void
-    }
-    
     interface TaskState {
         tasks: Task[]
         selectedTask: Task | null

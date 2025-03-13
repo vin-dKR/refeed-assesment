@@ -13,7 +13,7 @@ import { Plus } from "lucide-react";
 
 export default function Home() {
     const dispatch = useDispatch<AppDispatch>()
-    const { tasks, loading, error } = useSelector((state: RootState) => state.tasks) 
+    const { loading } = useSelector((state: RootState) => state.tasks) 
     const [isFormModalOpen, setIsFormModalOpen] = useState(false)
 
     useEffect(() => {

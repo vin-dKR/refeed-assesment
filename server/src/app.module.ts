@@ -4,9 +4,10 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose'
 import { TasksModule } from './tasks/tasks.module';
 
+
 @Module({
     imports: [
-        MongooseModule.forRoot(''),
+        MongooseModule.forRoot(process.env.MONGODB_URI),
         TasksModule,
     ],
     controllers: [AppController],
