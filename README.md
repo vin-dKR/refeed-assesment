@@ -1,67 +1,62 @@
-Task Manager App
+# Task Manager App
 
-A Task Management Application built with Next.js (Frontend) and NestJS (Backend), using MongoDB for data storage. This application allows users to perform CRUD (Create, Read, Update, Delete) operations on tasks.
+A **Task Management Application** built with **Next.js (Frontend)** and **NestJS (Backend)**, using **MongoDB** for data storage. This application allows users to perform **CRUD (Create, Read, Update, Delete) operations** on tasks.
 
-📌 Features
+## 📌 Features
 
-Create, edit, delete, and view tasks.
+- Create, edit, delete, and view tasks.
+- Task status management (Pending, In-Progress, Completed).
+- State management with **Redux Toolkit**.
+- API integration using **Axios**.
+- MongoDB for database storage.
+- Jest tests for both frontend and backend.
 
-Task status management (Pending, In-Progress, Completed).
+## 🛠 Tech Stack
 
-State management with Redux Toolkit.
+### **Frontend (Client - Next.js)**
 
-API integration using Axios.
+- Next.js (React Framework)
+- Redux Toolkit (State Management)
+- Axios (API calls)
+- TypeScript
+- Jest (Testing)
 
-MongoDB for database storage.
+### **Backend (Server - NestJS)**
 
-Jest tests for both frontend and backend.
+- NestJS (Node.js Framework)
+- MongoDB with Mongoose
+- Class-validator (DTO Validation)
+- Jest (Testing)
 
-🛠 Tech Stack
+## 🚀 Getting Started
 
-Frontend (Client - Next.js)
+### **1. Clone the Repository**
 
-Next.js (React Framework)
+```bash
+git clone https://github.com/vin-dKR/refeed-assesment
+cd refeed-assesment
+```
 
-Redux Toolkit (State Management)
+### **2. Setup Environment Variables**
 
-Axios (API calls)
+Create a **.env** file inside both `client/` and `server/` directories.
 
-TypeScript
+#### **Client (Frontend)**
 
-Jest (Testing)
-
-Backend (Server - NestJS)
-
-NestJS (Node.js Framework)
-
-MongoDB with Mongoose
-
-Class-validator (DTO Validation)
-
-Jest (Testing)
-
-🚀 Getting Started
-
-1. Clone the Repository
-
-git clone https://github.com/your-username/task-manager.git
-cd task-manager
-
-2. Setup Environment Variables
-
-Create a .env file inside both client/ and server/ directories.
-
-Client (Frontend)
-
+```env
 NEXT_PUBLIC_API_URL=http://localhost:8000/tasks
+```
 
-Server (Backend)
+#### **Server (Backend)**
 
+```env
 PORT=8000
 MONGO_URI=mongodb://localhost:27017/task-manager
+```
 
-3. Install Dependencies
+### **3. Install Dependencies**
 
+```bash
 # Install frontend dependencies
 cd client
 bun install
@@ -70,96 +65,82 @@ bun install
 # Install backend dependencies
 cd ../server
 npm install
+```
 
-4. Start MongoDB
+### **4. Start MongoDB**
 
-Ensure MongoDB is running locally. If you use Docker, start a MongoDB container:
+Ensure **MongoDB** is running locally. If you use **Docker**, start a MongoDB container:
 
-docker run -d -p 27017:27017 --name task-manager-mongo mongo
+```bash
+docker run -d -p 27017:27017 --name task-manager mongo
+```
 
-5. Run the Backend Server
+### **5. Run the Backend Server**
 
+```bash
 cd server
 npm run start
+```
 
-Backend should be running at http://localhost:8000.
+Backend should be running at **[http://localhost:8000](http://localhost:8000)**.
 
-6. Run the Frontend (Next.js App)
+### **6. Run the Frontend (Next.js App)**
 
+```bash
 cd client
 bun run dev
+```
 
-Frontend should be running at http://localhost:3000.
+Frontend should be running at **[http://localhost:3000](http://localhost:3000)**.
 
-🧪 Running Tests
+## 🧪 Running Tests
 
-Backend (NestJS) Tests
+### **Backend (NestJS) Tests**
 
 Run Jest tests for the backend:
 
+```bash
 cd server
 npm run test
+```
 
-Frontend (Next.js) Tests
+### **Frontend (Next.js) Tests**
 
 Run Jest tests for the frontend:
 
+```bash
 cd client
 npm run test
+```
 
-📜 API Endpoints (Backend)
+## 📜 API Endpoints (Backend)
 
-Method
+| Method     | Endpoint     | Description               |
+| ---------- | ------------ | ------------------------- |
+| **POST**   | `/tasks`     | Create a new task         |
+| **GET**    | `/tasks`     | Fetch all tasks           |
+| **GET**    | `/tasks/:id` | Fetch a single task by ID |
+| **PUT**    | `/tasks/:id` | Update a task             |
+| **DELETE** | `/tasks/:id` | Delete a task             |
 
-Endpoint
+## 📦 Docker Setup (Optional)
 
-Description
+### **1. Install Docker**
 
-POST
-
-/tasks
-
-Create a new task
-
-GET
-
-/tasks
-
-Fetch all tasks
-
-GET
-
-/tasks/:id
-
-Fetch a single task by ID
-
-PUT
-
-/tasks/:id
-
-Update a task
-
-DELETE
-
-/tasks/:id
-
-Delete a task
-
-📦 Docker Setup (Optional)
-
-1. Install Docker
-
-Ensure Docker is installed on your system. You can install it from Docker's official website.
+Ensure **Docker** is installed on your system. You can install it from [Docker's official website](https://www.docker.com/get-started).
 
 Verify the installation:
 
+```bash
 docker --version
 docker-compose --version
+```
 
-2. Run the Application with Docker
+### **2. Run the Application with Docker**
 
-To run the entire project using Docker, ensure the following docker-compose.yml file exists in the root directory:
+To run the entire project using **Docker**, ensure the following `docker-compose.yml` file exists in the root directory:
 
+```yaml
 version: "3.8"
 
 services:
@@ -201,25 +182,27 @@ services:
 
 volumes:
       mongo-data:
+```
 
 Run the application with:
 
+```bash
 docker-compose up
+```
 
 The application should be accessible at:
 
-Frontend: http://localhost:3000
-
-Backend: http://localhost:8000
-
-MongoDB: mongodb://localhost:27017/task-manager
+- **Frontend:** [http://localhost:3000](http://localhost:3000)
+- **Backend:** [http://localhost:8000](http://localhost:8000)
+- **MongoDB:** `mongodb://localhost:27017/task-manager`
 
 To stop the containers, run:
 
+```bash
 docker-compose down
+```
 
-📝 Conclusion
+---
 
-This Task Manager App demonstrates full-stack development using Next.js, NestJS, MongoDB, and Redux Toolkit. Feel free to contribute and improve the project!
-
-Author: Vinod KRGitHub: http://github.com/vin-dKR
+**Author:** Vinod KR
+**GitHub:** [vin-dKR](https://github.com/vin-dKR)
