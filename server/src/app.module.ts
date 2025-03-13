@@ -6,7 +6,7 @@ import { TasksModule } from './tasks/tasks.module';
 
 @Module({
     imports: [
-        MongooseModule.forRoot('mongodb+srv://usevinodkr:SlQ1CZzJv9MTeeiI@refeeddb.1zlqv.mongodb.net/?retryWrites=true&w=majority&appName=refeeddb'),
+        MongooseModule.forRoot(''),
         TasksModule,
     ],
     controllers: [AppController],
