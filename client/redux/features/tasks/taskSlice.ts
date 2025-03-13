@@ -1,125 +1,73 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
-import { fetchTasks, fetchTaskById, addTask, updateTask, deleteTask } from "./taskThunk"
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { addTask, deleteTask, fetchTasks, updateTask } from './taskThunk';
+import { RootState } from '@/redux/store';
 
-const initialState: TaskState = {
-    tasks: [],
-    filteredTasks: [],
-    searchQuery: '',
-    selectedTask: null,
-    loading: "idle",
-    error: null
+interface TasksState {
+  entities: { [id: string]: Task };
+  ids: string[];
+  searchQuery: string;
+  loading: 'idle' | 'pending' | 'succeeded' | 'failed';
+  error: string | null;
 }
 
+const initialState: TasksState = {
+  entities: {},
+  ids: [],
+  searchQuery: '',
+  loading: 'idle',
+  error: null
+};
+
 const taskSlice = createSlice({
-    name: "task",
-    initialState,
-    reducers: {
-        setSearchQuery: (state, action: PayloadAction<string>) => {
-            state.searchQuery = action.payload
-            state.filteredTasks = state.tasks.filter((task) => {
-                task.title.toLowerCase().includes(action.payload.toLowerCase()) ||
-                task.description.toLowerCase().includes(action.payload.toLowerCase())
-            })
-        },
-        clearSelectedTask: (state) => {
-            state.selectedTask = null
-        },
-        clearError: (state) => {
-            state.error = null
-        }
+  name: 'tasks',
+  initialState,
+  reducers: {
+    setSearchQuery: (state, action: PayloadAction<string>) => {
+      state.searchQuery = action.payload;
     },
-    extraReducers: (builder) => {
-        // fetchTaskss
-        builder.addCase(fetchTasks.pending, (state) => {
-            state.loading = "pending"
-            state.error = null
-        })
+  },
+  extraReducers: (builder) => {
+    builder
+      // Fetch tasks
+      .addCase(fetchTasks.pending, (state) => {
+        state.loading = 'pending';
+      })
+      .addCase(fetchTasks.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        // Normalize the tasks array into an entities object
+        state.entities = {};
+        state.ids = [];
+        action.payload.forEach((task) => {
+          state.entities[task._id] = task;
+          state.ids.push(task._id);
+        });
+      })
+      // Create task
+      .addCase(addTask.fulfilled, (state, action) => {
+        const task = action.payload;
+        state.entities[task._id] = task;
+        state.ids.push(task._id);
+      })
+      // Update task
+      .addCase(updateTask.fulfilled, (state, action) => {
+        const task = action.payload;
+        // Only update the specific task that changed
+        if (state.entities[task._id]) {
+          state.entities[task._id] = task;
+        }
+      })
+      // Delete task
+      .addCase(deleteTask.fulfilled, (state, action) => {
+        const id = action.payload;
+        delete state.entities[id];
+        state.ids = state.ids.filter(taskId => taskId !== id);
+      });
+  },
+});
 
-        builder.addCase(fetchTasks.fulfilled, (state, action: PayloadAction<Task[]>) => {
-            state.loading = "succeeded"
-            state.tasks = action.payload
-        })
+export const { setSearchQuery } = taskSlice.actions;
+export default taskSlice.reducer;
 
-        builder.addCase(fetchTasks.rejected, (state, action) => {
-            state.loading = "failed"
-            state.error = action.error.message || "failed to fetch all the tasks! cuz the engineer has skill issue"
-        })
-
-
-        // fetchTaskById
-        builder.addCase(fetchTaskById.pending, (state) => {
-            state.loading = "pending"
-            state.error = null
-        })
-
-        builder.addCase(fetchTaskById.fulfilled, (state, action: PayloadAction<Task>) => {
-            state.loading = "succeeded"
-            state.selectedTask = action.payload
-        })
-
-        builder.addCase(fetchTaskById.rejected, (state, action) => {
-            state.loading = "failed"
-            state.error = action.error.message || "failed to fetch this task! cuz the engineer has skill issue"
-        })
-
-
-        // addTask
-        builder.addCase(addTask.pending, (state) => {
-            state.loading = "pending"
-            state.error = null
-        })
-
-        builder.addCase(addTask.fulfilled, (state, action: PayloadAction<Task>) => {
-            state.loading = "succeeded"
-            state.tasks.push(action.payload)
-        })
-
-        builder.addCase(addTask.rejected, (state, action) => {
-            state.loading = "failed"
-            state.error = action.error.message || "failed to add task! engineer has some real sill issues"
-        })
-
-
-        // updateTask
-        builder.addCase(updateTask.pending, (state) => {
-            state.loading = "pending"
-            state.error = null
-        })
-
-        builder.addCase(updateTask.fulfilled, (state, action: PayloadAction<Task>) => {
-            state.loading = "succeeded"
-            state.selectedTask = action.payload
-
-            const index = state.tasks.findIndex((idx) => idx._id === action.payload._id)
-            if (index !== -1) {
-                state.tasks[index] = action.payload
-            }
-        })
-
-        builder.addCase(updateTask.rejected, (state, action) => {
-            state.loading = "failed"
-            state.error = action.error.message || "failed to update the task"
-        })
-
-
-        // deleteTask
-        builder.addCase(deleteTask.pending, (state) => {
-            state.loading = "pending"
-            state.error = null
-        })
-
-        builder.addCase(deleteTask.fulfilled, (state, action: PayloadAction<string>) => {
-            state.loading = "succeeded"
-            state.tasks = state.tasks.filter((task) => task._id !== action.payload)
-            state.selectedTask = null
-        })
-
-        builder.addCase(deleteTask.rejected, (state, action) => {
-            state.loading = "failed"
-            state.error = action.error.message || "failed to delete task! engineer has some real sill issues"
-        })
-    }
-})
-
-export const { setSearchQuery, clearSelectedTask, clearError } = taskSlice.actions
-export default taskSlice.reducer
+// Add selectors
+export const selectTaskIds = (state: RootState) => state.tasks.ids;
+export const selectTaskEntities = (state: RootState) => state.tasks.entities;

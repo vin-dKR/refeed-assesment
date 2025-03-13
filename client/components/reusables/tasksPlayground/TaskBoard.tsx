@@ -1,22 +1,24 @@
 "use client"
-import { useState } from "react"
+import React,{ useState } from "react"
 import { useSelector } from "react-redux"
 import type { RootState } from "@/redux/store"
 import TaskColumn from "./TaskColumn"
 import TaskDetailModal from "../tasksPopups/TaskDetailModal"
 import EditTaskModal from "../tasksPopups/TaskEdit"
 import SearchBar from "../SearchBar"
+import { getPendingTasks, getInProgressTasks, getCompletedTasks } from '@/redux/selector'
 
-export default function TaskBoard() {
-    const { tasks } = useSelector((state: RootState) => state.tasks)
+const TaskBoard = () => {
+    const pendingTasks = useSelector(getPendingTasks);
+    const inProgressTasks = useSelector(getInProgressTasks);
+    const completedTasks = useSelector(getCompletedTasks);
+    
+    const hasNoTasks = useSelector((state: RootState) => state.tasks.ids.length === 0);
+    
     const [selectedTask, setSelectedTask] = useState<Task | null>(null)
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [editingTask, setEditingTask] = useState<Task | null>(null)
-    
-    const pendingTasks = tasks.filter((task) => task.status === "pending")
-    const inProgressTasks = tasks.filter((task) => task.status === "in-progress")
-    const completedTasks = tasks.filter((task) => task.status === "completed")
     
     const handleTaskClick = (task: Task) => {
         setSelectedTask(task)
@@ -30,10 +32,9 @@ export default function TaskBoard() {
     
     return (
         <div className="h-full flex flex-col">
-            {/* Integrate SearchBar with task click handler */}
             <SearchBar onTaskClick={handleTaskClick} />
             
-            {tasks.length === 0 && (
+            {hasNoTasks && (
                 <div className="min-h-[400px] flex items-center justify-center text-muted-foreground text-sm border rounded-lg mb-4">No tasks at this moment!</div>
             )}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1">
@@ -57,13 +58,15 @@ export default function TaskBoard() {
                 />
             </div>
             
-            <EditTaskModal
-                task={editingTask}
-                isOpen={isEditModalOpen}
-                onClose={() => setIsEditModalOpen(false)}
-            />
+            {isEditModalOpen && (
+                <EditTaskModal
+                    task={editingTask}
+                    isOpen={isEditModalOpen}
+                    onClose={() => setIsEditModalOpen(false)}
+                />
+            )}
             
-            {selectedTask && (
+            {isDetailModalOpen && selectedTask && (
                 <TaskDetailModal
                     task={selectedTask}
                     isOpen={isDetailModalOpen}
@@ -77,3 +80,5 @@ export default function TaskBoard() {
         </div>
     )
 }
+
+export default React.memo(TaskBoard);

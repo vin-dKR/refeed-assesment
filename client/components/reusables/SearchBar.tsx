@@ -14,12 +14,12 @@ interface SearchBarProps {
 const SearchBar: React.FC<SearchBarProps> = ({ onTaskClick }) => {
     const dispatch = useDispatch<AppDispatch>();
     const searchQuery = useSelector((state: RootState) => state.tasks.searchQuery);
-    const tasks = useSelector((state: RootState) => state.tasks.tasks);
+    const tasks = useSelector((state: RootState) => state.tasks);
     const [showRecommendations, setShowRecommendations] = useState(false);
     const searchRef = useRef<HTMLDivElement>(null);
     
     // Filter tasks based on search query
-    const filteredTasks = tasks.filter(task => 
+    const filteredTasks = Object.values(tasks.entities).filter(task => 
         searchQuery && (
             task.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
             task.description.toLowerCase().includes(searchQuery.toLowerCase())

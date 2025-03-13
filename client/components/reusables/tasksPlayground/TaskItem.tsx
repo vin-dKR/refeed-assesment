@@ -1,6 +1,6 @@
 "use client"
 
-import type React from "react"
+import React from "react"
 
 import { Card, CardContent } from "@/components/ui/card"
 import { MoreHorizontal, CheckCircle2, Circle, Clock } from "lucide-react"
@@ -11,8 +11,7 @@ import type { AppDispatch } from "@/redux/store"
 import { cn } from "@/lib/utils"
 import { deleteTask, updateTask } from "@/redux/features/tasks/taskThunk"
 
-
-export default function TaskItem({ task, onClick, onEditClick }: TaskItemProps) {
+const TaskItemComponent = ({ task, onClick, onEditClick }: TaskItemProps) => {
     const dispatch = useDispatch<AppDispatch>()
 
     const handleDelete = (e: React.MouseEvent) => {
@@ -115,3 +114,16 @@ export default function TaskItem({ task, onClick, onEditClick }: TaskItemProps) 
         </Card>
     )
 }
+
+// Memoized version 
+const TaskItem = React.memo(TaskItemComponent, (prevProps, nextProps) => {
+    // Custom comparison function - only re-render if these props change
+    return (
+        prevProps.task._id === nextProps.task._id &&
+        prevProps.task.title === nextProps.task.title &&
+        prevProps.task.description === nextProps.task.description &&
+        prevProps.task.status === nextProps.task.status
+    )
+})
+
+export default TaskItem
