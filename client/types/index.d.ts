@@ -1,9 +1,11 @@
 declare global {
     interface Task {
-        _id: string
-        title: string
-        description: string
-        status: "pending" | "in-progress" | "completed"
+        _id: string;
+        title: string;
+        description: string;
+        status: "pending" | "in-progress" | "completed";
+        createdAt: string; // ISO string format
+        updatedAt?: string; // Optional, if you track updates
     }
 
     interface TaskListProps {
@@ -12,35 +14,31 @@ declare global {
 
     interface TaskState {
         tasks: Task[]
+        filteredTasks: Task[],
+        searchQuery: string,
         selectedTask: Task | null
         loading: "idle" | "pending" | "succeeded" | "failed"
         error: string | null
     }
 
-   interface TaskColumnProps {
-        title: string
-        tasks: Task[]
-        onTaskClick: (task: Task) => void
-        onEditClick: (task: Task) => void
-    }
-
-    interface SortableTaskItemProps {
-        task: Task
-        onClick: () => void
-        onEditClick: () => void
+    interface TaskColumnProps {
+        title: string;
+        tasks: Task[];
+        onTaskClick: (task: Task) => void;
+        onEditClick: (task: Task) => void;
     }
 
     interface TaskItemProps {
-        task: Task
-        onClick: () => void
-        onEditClick: () => void
+        task: Task;
+        onClick: () => void;
+        onEditClick: () => void;
     }
 
     interface TaskDetailModalProps {
-        task: Task
-        isOpen: boolean
-        onClose: () => void
-        onEditClick: () => void
+        task: Task;
+        isOpen: boolean;
+        onClose: () => void;
+        onEditClick: () => void;
     }
 
     interface TaskFormModalProps {
@@ -50,12 +48,19 @@ declare global {
     }
 
     interface TaskFormProps {
-        onSubmit: (data: { title: string; description: string; status: string }) => void
-        initialValues?: {
-            title: string,
-            description: string,
-            status: string
-        }
+        onSubmit: (data: TaskFormData) => void;
+        initialValues?: Task;
+    }
+
+    interface TaskFormData {
+        title: string;
+        description: string;
+        status: string;
+    }
+
+    interface TaskFormProps {
+        onSubmit: (data: TaskFormData) => void;
+        initialValues?: Task;
     }
 }
 

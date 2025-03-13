@@ -3,6 +3,8 @@ import { fetchTasks, fetchTaskById, addTask, updateTask, deleteTask } from "./ta
 
 const initialState: TaskState = {
     tasks: [],
+    filteredTasks: [],
+    searchQuery: '',
     selectedTask: null,
     loading: "idle",
     error: null
@@ -12,6 +14,13 @@ const taskSlice = createSlice({
     name: "task",
     initialState,
     reducers: {
+        setSearchQuery: (state, action: PayloadAction<string>) => {
+            state.searchQuery = action.payload
+            state.filteredTasks = state.tasks.filter((task) => {
+                task.title.toLowerCase().includes(action.payload.toLowerCase()) ||
+                task.description.toLowerCase().includes(action.payload.toLowerCase())
+            })
+        },
         clearSelectedTask: (state) => {
             state.selectedTask = null
         },
@@ -112,5 +121,5 @@ const taskSlice = createSlice({
     }
 })
 
-export const { clearSelectedTask, clearError } = taskSlice.actions
+export const { setSearchQuery, clearSelectedTask, clearError } = taskSlice.actions
 export default taskSlice.reducer

@@ -1,19 +1,18 @@
 "use client"
-
 import React from "react"
 import { CustomDialog, CustomDialogContent, CustomDialogHeader, CustomDialogTitle } from "@/components/ui/custom-dialog"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Edit, Trash2, CheckCircle2, Circle, Clock } from "lucide-react"
+import { Edit, Trash2, CheckCircle2, Circle, Clock, Calendar } from "lucide-react"
 import { useDispatch } from "react-redux"
 import type { AppDispatch } from "@/redux/store"
 import { deleteTask, updateTask } from "@/redux/features/tasks/taskThunk"
 import { cn } from "@/lib/utils"
-
+import { formatDistanceToNow, format } from "date-fns"
 
 export default function TaskDetailModal({ task, isOpen, onClose, onEditClick }: TaskDetailModalProps) {
     const dispatch = useDispatch<AppDispatch>()
-
+    
     const getStatusColor = (status: string) => {
         switch (status) {
             case "pending":
@@ -26,7 +25,7 @@ export default function TaskDetailModal({ task, isOpen, onClose, onEditClick }: 
                 return "bg-gray-100 text-gray-800 hover:bg-gray-200"
         }
     }
-
+    
     const getStatusIcon = () => {
         switch (task.status) {
             case "pending":
@@ -39,17 +38,32 @@ export default function TaskDetailModal({ task, isOpen, onClose, onEditClick }: 
                 return <Circle className="h-4 w-4 mr-1" />
         }
     }
-
+    
+    const formatTimeAgo = (timestamp: string) => {
+        try {
+            return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
+        } catch (error) {
+            return "Unknown time";
+        }
+    }
+    
+    const formatDate = (timestamp: string) => {
+        try {
+            return format(new Date(timestamp), "PPP 'at' p");
+        } catch (error) {
+            return "Unknown date";
+        }
+    }
+    
     const handleDelete = async () => {
         if (confirm("Are you sure you want to delete this task?")) {
             await dispatch(deleteTask(task._id))
             onClose()
         }
     }
-
+    
     const handleToggleStatus = () => {
         const newStatus = task.status === "completed" ? "pending" : "completed"
-
         dispatch(
             updateTask({
                 id: task._id,
@@ -59,7 +73,7 @@ export default function TaskDetailModal({ task, isOpen, onClose, onEditClick }: 
             }),
         )
     }
-
+    
     return (
         <CustomDialog open={isOpen} onOpenChange={onClose}>
             <CustomDialogContent className="sm:max-w-lg">
@@ -88,13 +102,21 @@ export default function TaskDetailModal({ task, isOpen, onClose, onEditClick }: 
                         </Badge>
                     </div>
                 </CustomDialogHeader>
-
+                
+                {/* Show timestamp when task was created */}
+                {task.createdAt && (
+                    <div className="flex items-center text-sm text-muted-foreground mb-4">
+                        <Calendar className="h-4 w-4 mr-2" />
+                        <span>Created {formatTimeAgo(task.createdAt)}</span>
+                        <span className="text-xs ml-1">({formatDate(task.createdAt)})</span>
+                    </div>
+                )}
+                
                 <div className="mt-2">
                     <p className={cn("whitespace-pre-wrap", task.status === "completed" && "line-through text-muted-foreground")}>
                         {task.description}
                     </p>
                 </div>
-
                 <div className="flex justify-end gap-2 mt-4">
                     <Button variant="outline" onClick={onEditClick}>
                         <Edit className="mr-2 h-4 w-4" />

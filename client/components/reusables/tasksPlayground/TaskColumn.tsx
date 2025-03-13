@@ -3,7 +3,6 @@
 import TaskItem from "./TaskItem"
 
 
-
 export default function TaskColumn({ title, tasks, onTaskClick, onEditClick }: TaskColumnProps) {
     return (
         <div className="bg-muted/40 rounded-lg p-4 flex flex-col min-h-[400px]">
